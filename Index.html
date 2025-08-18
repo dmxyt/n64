@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Daemonix - Rooms Nintendo 64</title>
+  <meta name="description" content="Descargue sus videojuegos retros favoritos totalmente gratis desde nuestro sitio web.">
+    <meta name="keywords" content="Rooms, Nintendo 64, Videojuegos, DaemonixGames">
+    <meta name="author" content="Daemonix">
+</head>
+<style>
+    /* Contenedor del intro con rebote suave */
+.intro-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+  animation: fadeIn 1.2s ease forwards, bounce 3s ease-in-out infinite;
+}
+
+/* Imagen del logo con zoom, parpadeo y glow */
+.intro-logo {
+  width: 150px;
+  height: auto;
+  animation: zoomIn 2s ease-in-out infinite alternate,
+             retroBlink 1.5s infinite,
+             glowPulse 2.5s infinite alternate;
+  filter: drop-shadow(0 0 12px #ff4f4f);
+}
+
+/* Zoom suave */
+@keyframes zoomIn {
+  from { transform: scale(1); opacity: 0.9; }
+  to   { transform: scale(1.15); opacity: 1; }
+}
+
+/* Parpadeo retro */
+@keyframes retroBlink {
+  0%,20%,40%,60%,80%,100% { opacity: 1; filter: drop-shadow(0 0 12px #ff4f4f); }
+  10%,30%,50%,70%,90%     { opacity: 0.7; filter: drop-shadow(0 0 6px #ff2f2f); }
+}
+
+/* Glow pulsante */
+@keyframes glowPulse {
+  from { filter: drop-shadow(0 0 12px #ff4f4f); }
+  to   { filter: drop-shadow(0 0 24px #ff8f8f); }
+}
+
+/* Rebote suave del contenedor */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+/* Fade-in general */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Texto también con efecto glow y parpadeo */
+.intro-content p {
+  font-size: 2rem;
+  animation: textGlow 2s infinite alternate;
+  color: #ff4f4f;
+  text-shadow: 1px 1px 6px #550000;
+}
+
+@keyframes textGlow {
+  from { text-shadow: 1px 1px 6px #550000, 0 0 6px #ff4f4f; }
+  to   { text-shadow: 1px 1px 10px #550000, 0 0 20px #ff8f8f; }
+}
+    /* Parpadeo retro tipo N64 */
+.intro-logo {
+  width: 150px;
+  height: auto;
+  animation: retroBlink 1.5s infinite, zoomIn 2s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 12px #ff4f4f);
+}
+
+@keyframes retroBlink {
+  0%, 20%, 40%, 60%, 80%, 100% {
+    opacity: 1;
+    filter: drop-shadow(0 0 12px #ff4f4f);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    opacity: 0.7;
+    filter: drop-shadow(0 0 6px #ff2f2f);
+  }
+}
+    
+    /* Centrar y animar la imagen del intro */
+.intro-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+  animation: fadeIn 1.2s ease forwards;
+}
+
+.intro-logo {
+  width: 150px;
+  height: auto;
+  animation: zoomIn 2s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 12px #ff4f4f);
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0; padding: 0;
+    background: linear-gradient(135deg, #b90000 0%, #8a0000 100%);
+    color: #fff;
+    font-family: 'Press Start 2P', cursive, monospace;
+    user-select: none;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  /* Intro overlay */
+  #introOverlay {
+    position: fixed;
+    inset: 0;
+    background: #8a0000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ff4f4f;
+    font-size: 3rem;
+    font-weight: 900;
+    text-shadow: 2px 2px 6px #550000;
+    z-index: 9999;
+    user-select: none;
+    animation: pulse 1.8s ease-in-out infinite alternate;
+  }
+  @keyframes pulse {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0.8; transform: scale(1.05); }
+  }
+  /* Main content hidden initially */
+  #mainContent {
+    display: none;
+    flex: 1;
+    flex-direction: column;
+  }
+  header {
+    background: #8b0000;
+    padding: 1.5rem 2rem;
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 900;
+    letter-spacing: 4px;
+    text-shadow: 2px 2px 6px #4b0000;
+    box-shadow: inset 0 -4px 5px #5f0000;
+  }
+  .emulator-container {
+    margin: 1.8rem auto;
+    text-align: center;
+  }
+  .emulator-btn {
+    background: #ff2f2f;
+    color: #fff;
+    font-weight: 900;
+    padding: 1rem 2.4rem;
+    font-size: 1.1rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(255, 50, 50, 0.7);
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.2s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  }
+  .emulator-btn:hover, .emulator-btn:focus {
+    background: #cc0000;
+    transform: scale(1.1);
+    box-shadow: 0 0 18px #ff3b3b;
+    outline: none;
+  }
+  main.container {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    margin: 0 auto 3rem auto;
+    padding: 0 1rem;
+    gap: 1.8rem;
+  }
+  .game-card {
+    background: #7f0000;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(255, 44, 44, 0.9);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 1rem;
+    gap: 1rem;
+  }
+  .game-card:hover, .game-card:focus {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(255, 70, 70, 1);
+    outline: none;
+  }
+  .game-card img {
+    width: 120px;
+    height: 90px;
+    border-radius: 12px;
+    border: 4px solid #ff3f3f;
+    object-fit: cover;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 2px #b00000);
+  }
+  .game-info {
+    padding: 0;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .game-title {
+    font-size: 1.2rem;
+    text-align: left;
+    color: #ff5757;
+    text-shadow: 1px 1px 3px #550000;
+    font-weight: 900;
+  }
+  #detailPanel {
+    max-width: 720px;
+    background: #7f0000;
+    border-radius: 16px;
+    box-shadow: 0 10px 35px rgba(255, 44, 44, 0.95);
+    padding: 2rem 2rem 3rem 2rem;
+    margin: 3rem auto 4rem auto;
+    color: #ffadad;
+    position: relative;
+    display: none;
+    animation: fadeInPanel 0.4s ease forwards;
+  }
+  @keyframes fadeInPanel {
+    from {opacity: 0; transform: translateY(10px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+  #detailPanel img {
+    width: 100%;
+    max-height: 360px;
+    object-fit: contain;
+    border-radius: 14px;
+    border: 4px solid #ff3f3f;
+    margin-bottom: 1.8rem;
+    box-shadow: 0 0 15px #ff5757;
+  }
+  #detailPanel h2 {
+    color: #ff6b6b;
+    font-weight: 900;
+    margin-bottom: 1rem;
+    text-align: center;
+    text-shadow: 1px 1px 5px #550000;
+    font-size: 2rem;
+  }
+  #detailPanel p {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+    text-align: justify;
+  }
+  #detailPanel iframe {
+    width: 100%;
+    height: 320px;
+    border-radius: 16px;
+    margin-bottom: 2.5rem;
+    border: none;
+    box-shadow: 0 0 25px #ff4f4faa;
+  }
+  #detailPanel .download-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    font-size: 1.15rem;
+    padding: 1.2rem 0;
+    border-radius: 12px;
+    background-color: #ff2f2f;
+    border: none;
+    color: white;
+    font-weight: 900;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 6px 20px #ff3b3b;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  #detailPanel .download-btn:hover {
+    background-color: #cc0000;
+    box-shadow: 0 0 15px #ff1a1a;
+  }
+  #detailPanel .back-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: #ff2f2f;
+    border: none;
+    color: white;
+    font-weight: 900;
+    cursor: pointer;
+    padding: 0.3rem 0.7rem;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    user-select: none;
+    font-size: 1.7rem;
+    line-height: 1;
+  }
+  #detailPanel .back-btn:hover {
+    background-color: #cc0000;
+  }
+  footer {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    color: #ff9f9f;
+    font-size: 0.9rem;
+    user-select: none;
+    text-shadow: 1px 1px 4px #550000;
+    background: #8a0000;
+    box-shadow: inset 0 2px 5px #660000;
+  }
+  @media (max-width: 640px) {
+    main.container {
+      max-width: 100%;
+      padding: 0 1rem;
+    }
+    .game-card {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .game-card img {
+      width: 100%;
+      height: 160px;
+      border-radius: 12px;
+      margin-bottom: 0.8rem;
+      flex-shrink: initial;
+    }
+    .game-info {
+      justify-content: center;
+      width: 100%;
+    }
+    #detailPanel iframe {
+      height: 220px;
+    }
+    #detailPanel h2 {
+      font-size: 1.6rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div id="introOverlay" role="alert" aria-live="assertive" aria-label="Intro de AstroGames">
+  <div class="intro-content">
+    <img src="https://raw.githubusercontent.com/dmxyt/website/refs/heads/gh-pages/assets/3704485_ico.png" 
+         alt="Logo" 
+         class="intro-logo" />
+    <p>🚀 Bienvenid@🕹️</p>
+  </div>
+</div>
+</div>
+
+<div id="mainContent" tabindex="-1">
+<header>Installer - Rooms Nintendo 64</header>
+
+<div class="emulator-container">
+  <a href="https://www.mediafire.com/file/fb715gswpoqooto/M64Plus+FZ+Pro+by+(AstroGames).apk/file" target="_blank" class="emulator-btn" rel="noopener noreferrer" aria-label="Descargar Emulador Nintendo 64">
+    🎮 Descargar Emulador N64 (Haz Click Aquí)
+  </a>
+  <div class="search-container" style="text-align:center; margin:1.5rem 0;">
+  <input 
+    type="text" 
+    id="gameSearch" 
+    placeholder="🔍 Buscar juego..." 
+    aria-label="Buscar juego Nintendo 64" 
+    style="
+      padding: 0.8rem 1rem;
+      width: 90%;
+      max-width: 400px;
+      font-size: 1rem;
+      border-radius: 12px;
+      border: 2px solid #ff4f4f;
+      background: #7f0000;
+      color: #fff;
+      box-shadow: 0 3px 8px rgba(255,50,50,0.5);
+      outline: none;
+    "
+  />
+</div>
+</div>
+
+<main class="container" id="gamesContainer" aria-live="polite" aria-label="Lista de juegos Nintendo 64"></main>
+
+<section id="detailPanel" aria-modal="true" role="dialog" aria-labelledby="detailTitle" tabindex="-1">
+  <button class="back-btn" id="backBtn" aria-label="Volver a la lista">×</button>
+  <h2 id="detailTitle"></h2>
+  <img id="detailImage" src="" alt="Imagen del juego" />
+  <iframe id="detailTrailer" src="" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="Trailer del juego"></iframe>
+  <p id="detailDescription"></p>
+  <a id="detailDownloadBtn" href="#" download class="download-btn" aria-label="Descargar Room del juego">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 24 24" style="vertical-align: middle; margin-right: 8px;">
+      <path d="M12 16l4-5h-3V4h-2v7H8l4 5zM6 18v2h12v-2H6z"></path>
+    </svg>
+    Descargar Room
+  </a>
+</section>
+
+<footer>© 2025 Daemonix LLC | All rights reserved</footer>
+</div>
+
+<audio id="click-sound" src="https://cdn.jsdelivr.net/gh/pascaldevink/git-smb@21d91a56fec57a752106ffc478edbe4575c9587e/share/data/smb/smb_1up.wav" preload="auto"></audio>
+
+<script>
+  const games = [
+    {
+      title: 'Banjo Tooie',
+      description: 'Gruntilda, la bruja malvada, regresa con más fuerza y acompañada de sus hermanas, Grunty y Mingella, para vengarse de Banjo y sus amigos. Su plan es vaporizar la isla y sus habitantes.',
+      image: 'https://uvejuegos.com/img/caratulas/209/Banjo-Tooie-N64-JP.jpg',
+      trailer: 'https://www.youtube.com/embed/GALpfLZ2Rm3DqL3o',
+      download: 'https://archive.org/download/banjo-tooie-usa_202508/Banjo-Tooie%20%28USA%29.z64'
+    },
+    {
+      title: 'Super Mario 64',
+      description: 'El clásico juego de plataformas 3D que revolucionó la Nintendo 64. Explora el Castillo de Peach y rescata a la princesa.',
+      image: 'https://cdn.jsdelivr.net/gh/IanSkelskey/n64-covers@18bddbb3d70ccba85576822bdde4cedfe922d4c0/labels/NUS-NSME-USA.png',
+      trailer: 'https://www.youtube.com/embed/GALpfLZ2Rm3DqL3o',
+      download: 'https://archive.org/download/Mario64-astrogames/Super%20Mario%2064%20%28USA%29.z64'
+    },
+    {
+      title: 'The Legend of Zelda: Ocarina of Time',
+      description: 'La épica aventura de Link en un mundo mágico. Descubre secretos y enfrenta a Ganondorf en esta obra maestra.',
+      image: 'https://cdn.jsdelivr.net/gh/IanSkelskey/n64-covers@18bddbb3d70ccba85576822bdde4cedfe922d4c0/labels/NUS-CZLE-USA.png',
+      trailer: 'https://www.youtube.com/embed/nVv-4u5O5Pc',
+      download: 'https://archive.org/download/legend-of-zelda-the-ocarina-of-time-usa-rev-2_202507/Legend%20of%20Zelda%2C%20The%20-%20Ocarina%20of%20Time%20%28USA%29%20%28Rev%202%29.z64'
+    },
+    {
+      title: 'GoldenEye 007',
+      description: 'Disfruta del shooter en primera persona basado en la película de James Bond, con misiones secretas y multijugador clásico.',
+      image: 'https://coverproject.sfo2.cdn.digitaloceanspaces.com/nintendo_64/n64_goldeneye007_3_label_thumb.jpg',
+      trailer: 'https://www.youtube.com/embed/6rso3NILoHs',
+      download: 'https://archive.org/download/golden-eye-007-usa_202507/GoldenEye%20007%20%28USA%29.z64'
+    },
+    {
+      title: 'Mario Kart 64',
+      description: 'Compite en carreras frenéticas con los personajes de Mario en pistas llenas de acción y power-ups.',
+      image: 'https://cdn.jsdelivr.net/gh/IanSkelskey/n64-covers@18bddbb3d70ccba85576822bdde4cedfe922d4c0/labels/NUS-NKTE-USA.png',
+      trailer: 'https://www.youtube.com/embed/VYi5-PhYqrw',
+      download: 'https://archive.org/download/mario-kart-64-usa_202507/Mario%20Kart%2064%20%28USA%29.z64'
+    },
+    {
+      title: 'Banjo-Kazooie',
+      description: 'Un juego de plataformas 3D con el entrañable oso Banjo y su amigo el pájaro Kazooie. Rescata a su hermana en este mágico mundo.',
+      image: 'https://cdn.jsdelivr.net/gh/IanSkelskey/n64-covers@18bddbb3d70ccba85576822bdde4cedfe922d4c0/labels/NUS-NBKP-EUR.png',
+      trailer: 'https://www.youtube.com/embed/4o9zBSkT7Fc',
+      download: 'https://archive.org/download/banjo-kazooie-usa-rev-1_202507/Banjo-Kazooie%20%28USA%29%20%28Rev%201%29.z64'
+    },
+    {
+      title: 'Conker’s Bad Fur Day',
+      description: 'Un juego irreverente y adulto con humor negro, acción y plataformas. Protagonizado por una ardilla con resaca.',
+      image: 'https://coverproject.sfo2.cdn.digitaloceanspaces.com/nintendo_64/n64_conkersbfd_au_label_thumb.jpg',
+      trailer: 'https://www.youtube.com/embed/-MOePktdUjNMgY9X',
+      download: 'https://archive.org/download/conkers-bad-fur-day-usa_20250720/Conker%27s%20Bad%20Fur%20Day%20%28USA%29.z64'
+    },
+  ];
+
+  const container = document.getElementById('gamesContainer');
+  const detailPanel = document.getElementById('detailPanel');
+  const detailTitle = document.getElementById('detailTitle');
+  const detailImage = document.getElementById('detailImage');
+  const detailTrailer = document.getElementById('detailTrailer');
+  const detailDescription = document.getElementById('detailDescription');
+  const detailDownloadBtn = document.getElementById('detailDownloadBtn');
+  const backBtn = document.getElementById('backBtn');
+  const clickSound = document.getElementById('click-sound');
+  const introOverlay = document.getElementById('introOverlay');
+  const mainContent = document.getElementById('mainContent');
+
+  let isPlayingSound = false;
+
+  function showList() {
+    detailPanel.style.display = 'none';
+    container.style.display = 'flex';
+    detailTrailer.src = '';
+    detailPanel.setAttribute('aria-hidden', 'true');
+    container.setAttribute('aria-hidden', 'false');
+    container.focus();
+  }
+
+  function showDetail(game) {
+    detailTitle.textContent = game.title;
+    detailImage.src = game.image;
+    detailImage.alt = `Carátula del juego ${game.title}`;
+    detailTrailer.src = game.trailer + "?autoplay=0&rel=0";
+    detailDescription.textContent = game.description;
+    detailDownloadBtn.href = game.download;
+    detailPanel.style.display = 'block';
+    container.style.display = 'none';
+    detailPanel.setAttribute('aria-hidden', 'false');container.setAttribute('aria-hidden', 'true');
+    detailPanel.focus();
+  }
+
+  // Crea las cards de los juegos
+  games.forEach(game => {
+    const card = document.createElement('article');
+    card.classList.add('game-card');
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-label', `Ver detalles del juego ${game.title}`);
+
+    card.innerHTML = `
+      <img src="${game.image}" alt="Carátula del juego ${game.title}" />
+      <div class="game-info">
+        <div class="game-title">${game.title}</div>
+      </div>
+    `;
+
+    card.addEventListener('click', () => {
+      clickSound.currentTime = 0;
+      clickSound.play();
+      showDetail(game);
+    });
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        clickSound.currentTime = 0;
+        clickSound.play();
+        showDetail(game);
+      }
+    });
+
+    container.appendChild(card);
+  });
+
+  backBtn.addEventListener('click', () => {
+    clickSound.currentTime = 0;
+    clickSound.play();
+    showList();
+  });
+
+  // Sonido solo se reproduce una vez por descarga, evitando repetición rápida
+  detailDownloadBtn.addEventListener('click', (e) => {
+    if (!isPlayingSound) {
+      isPlayingSound = true;
+      clickSound.currentTime = 0;
+      clickSound.play();
+      // Permite descargar normalmente
+      // Cuando termine el sonido, permite que se reproduzca otra vez
+      clickSound.onended = () => {
+        isPlayingSound = false;
+      };
+    } else {
+      // Si el sonido ya está sonando, evita que se reproduzca de nuevo pero deja que el link funcione
+    }
+  });
+
+  // Intro tipo Nintendo Switch: mostrar overlay 3 seg y luego fadeout y mostrar contenido
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      introOverlay.style.transition = 'opacity 1s ease';
+      introOverlay.style.opacity = '0';
+      setTimeout(() => {
+        introOverlay.style.display = 'none';
+        mainContent.style.display = 'flex';
+        mainContent.focus();
+      }, 1000);
+    }, 3000);
+  });
+  const searchInput = document.getElementById('gameSearch');
+
+searchInput.addEventListener('input', () => {
+  const query = searchInput.value.toLowerCase();
+  const cards = container.querySelectorAll('.game-card');
+
+  cards.forEach(card => {
+    const title = card.querySelector('.game-title').textContent.toLowerCase();
+    if (title.includes(query)) {
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+});
+</script>
+
+</body>
+</html>
